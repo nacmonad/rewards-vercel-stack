@@ -8,11 +8,9 @@ const Header: React.FC = () => {
     router.pathname === pathname;
 
   let left = (
-    <div className="left">
-      <Link href="/">
-        <a className="bold" data-active={isActive("/")}>
+    <div className="left bold">
+      <Link className="bold" data-active={isActive("/")} href="/">
           Feed
-        </a>
       </Link>
       <style jsx>{`
         .bold {
