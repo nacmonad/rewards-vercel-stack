@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "dev": "prisma generate && next",
-    "build": "prisma generate && next build",
+    "dev": "next",
+    "build": "prisma db push && next build",
     "start": "next start"
   },
   "keywords": [],
@@ -12,6 +12,7 @@
   "license": "MIT",
   "dependencies": {
     "@prisma/client": "^4.13.0",
+    "jsonwebtoken": "^9.0.0",
     "next": "^13.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

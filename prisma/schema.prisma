@@ -1,3 +1,9 @@
+//don't forget 
+//npx prisma generate
+//npx prisma db push
+
+//debug with 
+//npx prisma studio
 // schema.prisma
 
 generator client {
@@ -29,25 +35,42 @@ model UserRole {
 
 // Define the User entity
 model User {
-  id       Int      @id @default(autoincrement())
-  name     String
-  email    String   @unique
-  password String
-  roleId   Int
-  role     UserRole @relation(fields: [roleId], references: [id])
-  points   Point[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id         Int          @id @default(autoincrement())
+  name       String
+  email      String       @unique
+  password   String
+  roleId     Int
+  role       UserRole     @relation(fields: [roleId], references: [id])
+  points     Point[]      @relation("owner")
+  issued     Point[]      @relation("issuer")
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
+  Redemption Redemption[]
 }
 
 // Define the Point entity
 model Point {
-  id         Int       @id @default(autoincrement())
-  code       String    @unique
-  awardedAt  DateTime? @default(now())
-  redeemedAt DateTime? @default(now())
-  ownerId    Int?
-  owner      User?     @relation(fields: [ownerId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id            Int          @id @default(autoincrement())
+  code          String       @unique
+  issuerId      Int
+  initialAmount Int
+  currentAmount Int
+  issuer        User         @relation("issuer", fields: [issuerId], references: [id])
+  ownerId       Int?
+  owner         User?        @relation("owner", fields: [ownerId], references: [id])
+  awardedAt     DateTime?
+  expiresAt     DateTime?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  Redemption    Redemption[]
+}
+
+model Redemption {
+  id             Int      @id @default(autoincrement())
+  redeemedAt     DateTime @default(now())
+  redeemedAmount Int
+  point          Point    @relation(fields: [pointId], references: [id])
+  pointId        Int
+  redeemedBy     User     @relation(fields: [redeemedById], references: [id])
+  redeemedById   Int
 }
