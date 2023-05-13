@@ -8,13 +8,18 @@ const prisma = new PrismaClient()
 async function generateQRCode(pointId: number, body: any) {
   const filename = `qr_point_${pointId}.png`;
   const filepath = path.join(__dirname, '../../../../', 'qr_codes', filename);
-  console.log(filepath)
+  console.log(filepath);
+  
+  //const logoPath = path.join(__dirname, '../../../../', './public/assets/logo.png'); // Path to the logo image file
+
   return new Promise<void>((resolve, reject) => {
+    //const child = spawn('qrencode', ['-t', 'PNG', '-o', filepath, '-l', logoPath, '-L', 'M', JSON.stringify(body)], { stdio: 'pipe' });
     const child = spawn('qrencode', ['-t', 'PNG', '-o', filepath, JSON.stringify(body)], { stdio: 'pipe' });
+
     child.stdin.end();
-    child.on('error', (err)=>{
+    child.on('error', (err) => {
       console.log("[qrErr]", err);
-    })
+    });
 
     child.on('exit', (code) => {
       if (code !== 0) {
@@ -25,6 +30,7 @@ async function generateQRCode(pointId: number, body: any) {
     });
   });
 }
+
 
 
 

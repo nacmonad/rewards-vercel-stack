@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
          }
       case 'POST': {
         ({ initialAmount, issuerId, promotionId, productId } = req.body);
-        
+        console.log("[createPoints]", { initialAmount, issuerId, promotionId, productId })
         const point = await createPoint({initialAmount, issuerId, promotionId, productId});
         return res.status(200).json(point);
         }
