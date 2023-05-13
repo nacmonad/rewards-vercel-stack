@@ -9,6 +9,7 @@ export const authOptions = {
       clientSecret: process.env.GITHUB_SECRET,
     }),
     // ...add more providers here
+    //
   ],
   secret: process.env.SESSION_SECRET
 }
