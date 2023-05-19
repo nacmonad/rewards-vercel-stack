@@ -1,52 +1,35 @@
-import React from "react";
+import React, {useState} from "react";
 import Link from "next/link";
+import UserTab from "./UserTab";
 import { useRouter } from "next/router";
+import { signIn, signOut,useSession } from "next-auth/react";
 
 const Header: React.FC = () => {
+  const { data: session } = useSession();
   const router = useRouter();
+  
+
   const isActive: (pathname: string) => boolean = (pathname) =>
     router.pathname === pathname;
-
+    
   let left = (
     <div className="left bold">
       <Link className="bold" data-active={isActive("/")} href="/">
-          Feed
+          Home
       </Link>
-      <style jsx>{`
-        .bold {
-          font-weight: bold;
-        }
-
-        a {
-          text-decoration: none;
-          color: #000;
-          display: inline-block;
-        }
-
-        .left a[data-active="true"] {
-          color: gray;
-        }
-
-        a + a {
-          margin-left: 1rem;
-        }
-      `}</style>
     </div>
   );
 
-  let right = null;
-
+  let right = session ? (
+    <UserTab session={session} />
+  ) : (<div className="right">
+      <button onClick={() => signIn()}>Sign In</button>
+    </div>)
+  
   return (
-    <nav>
+    <nav className={`flex flex-row w-full justify-between px-4 py-2`}>
       {left}
-      {right}
-      <style jsx>{`
-        nav {
-          display: flex;
-          padding: 2rem;
-          align-items: center;
-        }
-      `}</style>
+      {right}      
     </nav>
   );
 };

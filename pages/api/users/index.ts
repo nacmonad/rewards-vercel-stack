@@ -22,6 +22,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const users: User[] = await prisma.user.findMany({
       select: {
         id: true,
+        githubId: true,
+        googleId: true,
         roleId: true,
         name: true,
         email: true,

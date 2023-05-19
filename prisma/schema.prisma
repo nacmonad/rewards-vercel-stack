@@ -39,8 +39,10 @@ model User {
   name       String
   email      String       @unique
   password   String?
-  roleId     Int?
+  roleId     Int?          @default(3)
   role       UserRole?     @relation(fields: [roleId], references: [id])
+  githubId    String?      @unique
+  googleId    String?      @unique
   points     Point[]      @relation("owner")
   issued     Point[]      @relation("issuer")
   createdAt  DateTime?     @default(now())

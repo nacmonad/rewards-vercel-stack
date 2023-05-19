@@ -1,8 +1,8 @@
 Arguments: 
-  /home/nacmonad/.nvm/versions/node/v16.20.0/bin/node /home/nacmonad/.nvm/versions/node/v16.20.0/bin/yarn add next-auth next-auth/providers/github
+  /home/nacmonad/.nvm/versions/node/v16.20.0/bin/node /home/nacmonad/.nvm/versions/node/v16.20.0/bin/yarn add next-auth/providers/google
 
 PATH: 
-  /home/nacmonad/.krew/bin:/home/nacmonad/.krew/bin:/home/nacmonad/.nvm/versions/node/v16.20.0/bin:/home/nacmonad/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
+  /home/nacmonad/.krew/bin:/home/nacmonad/.nvm/versions/node/v16.20.0/bin:/home/nacmonad/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin
 
 Yarn version: 
   1.22.19
@@ -14,7 +14,7 @@ Platform:
   linux x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/next-auth%2fproviders/github: Request "https://registry.yarnpkg.com/next-auth%2fproviders/github" returned a 405
+  Error: https://registry.yarnpkg.com/next-auth%2fproviders/google: Request "https://registry.yarnpkg.com/next-auth%2fproviders/google" returned a 405
       at Request.params.callback [as _callback] (/home/nacmonad/.nvm/versions/node/v16.20.0/lib/node_modules/yarn/lib/cli.js:66154:18)
       at Request.self.callback (/home/nacmonad/.nvm/versions/node/v16.20.0/lib/node_modules/yarn/lib/cli.js:140890:22)
       at Request.emit (node:events:513:28)
