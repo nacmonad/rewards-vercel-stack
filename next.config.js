@@ -1,8 +1,7 @@
-module.exports = {
-    // Other Next.js configuration options
-    // ...
-  
-    // Add PostCSS configuration
+const withPWA = require('next-pwa')({
+  dest: 'public'
+})
 
-  };
-  
+module.exports = withPWA({
+  // next.js config
+})
