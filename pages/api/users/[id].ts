@@ -12,6 +12,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
       select: {
         id: true,
+        githubId: true,
+        googleId: true,
         roleId: true,
         name: true,
         email: true,
