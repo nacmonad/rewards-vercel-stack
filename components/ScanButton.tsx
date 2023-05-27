@@ -55,7 +55,8 @@ const ScanButton = () => {
 
   const startScanner = async () => {
     try {
-      const constraints = { video: true };
+      const constraints = { video: true, facingMode: "environment" };
+      
       const stream = await navigator.mediaDevices.getUserMedia(constraints);
       handleSuccess(stream);
       setIsScanning(true)
