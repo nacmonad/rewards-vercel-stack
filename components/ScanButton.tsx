@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { BrowserQRCodeReader } from '@zxing/browser';
+import { NotFoundException, ChecksumException, FormatException } from "@zxing/library";
 
 
 const ScanButton = () => {
@@ -12,15 +13,31 @@ const ScanButton = () => {
     streamRef.current = stream; // Store the stream reference
 
     const codeReader = new BrowserQRCodeReader();
-    codeReader.decodeFromVideoElement(videoRef.current, (result, error) => {
-        if (result) {
-        // QR code successfully decoded, do something with the result
-        console.log('QR code result:', result.getText());
-        } else if (error) {
-        // Error occurred while decoding QR code
-        console.error('Error decoding QR code:', error);
-        }
-    });
+    try {
+        codeReader.decodeFromVideoElement(videoRef.current, (result, error) => {
+            if(error) {
+                if (error instanceof NotFoundException) {
+                    console.log('No QR code found.')
+                  }
+            
+                  if (error instanceof ChecksumException) {
+                    console.log('A code was found, but it\'s read value was not valid.')
+                  }
+            
+                  if (error instanceof FormatException) {
+                    console.log('A code was found, but it was in a invalid format.')
+                  }
+            }
+            if (result) {
+            let pathname = result.getText()           
+            pathname = pathname.replace('"', '');
+            window.location.href= pathname
+            }
+            //ignore errors
+        });
+    } catch(e) {
+        console.error("ignorethis:", e)
+    }
   };
 
   const handleError = (error) => {
