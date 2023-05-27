@@ -1,5 +1,6 @@
 import React from "react";
 import Layout from "../components/Layout";
+import ScanButton from "../components/ScanButton";
 import { PostProps } from "../components/Post";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -23,7 +24,9 @@ const Home: React.FC<Props> = (props) => {
     <Layout>
       <div className="page">
         <h1>Sago Rewards</h1>
-        <main>{/* Add your content here */}</main>
+        <main>{/* Add your content here */}
+          <ScanButton/>
+        </main>
       </div>
     </Layout>
   );
