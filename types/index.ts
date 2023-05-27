@@ -20,7 +20,6 @@ export type CreateRedemptionArgs = {
 
 export type JWTCodeTokenPayload = {
     initialAmount: number
-    currentAmount: number
     issuerId: number
     promotionId?: number
     productId?: number

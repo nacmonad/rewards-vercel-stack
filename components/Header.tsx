@@ -27,7 +27,7 @@ const Header: React.FC = () => {
     </div>)
   
   return (
-    <nav className={`flex flex-row w-full justify-between px-4 py-2`}>
+    <nav className={`flex flex-row w-full justify-between`}>
       {left}
       {right}      
     </nav>

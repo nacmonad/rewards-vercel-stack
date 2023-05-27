@@ -5,14 +5,49 @@ import { spawn } from 'child_process'
 import path from 'path'
 const prisma = new PrismaClient()
 
+async function generateCoupon(qrCodeFilepath : string) {
+  return new Promise<void>((resolve, reject) => {
+
+    const scriptname = `generateCouponWithQRCode.sh`;
+    const scriptpath = path.join(__dirname, '../../../../scripts', scriptname);
+    const child = spawn('bash', [scriptpath, qrCodeFilepath], { stdio: 'pipe' });
+
+    child.stdout.on('data', (data) => {
+      // Handle script output if needed
+      console.log(data.toString());
+    });
+
+    child.stderr.on('data', (data) => {
+      // Handle script error if needed
+      console.error(data.toString());
+    });
+
+    child.on('error', (error) => {
+      // Handle child process error if needed
+      console.error(error);
+      reject(error);
+    });
+
+    child.on('exit', (code) => {
+      if (code === 0) {
+        // Script executed successfully
+        resolve();
+      } else {
+        // Script execution failed
+        reject(new Error(`Script exited with code ${code}`));
+      }
+    });
+  });
+}
+
 async function generateQRCode(pointId: number, body: any) {
   const filename = `qr_point_${pointId}.png`;
-  const filepath = path.join(__dirname, '../../../../', 'qr_codes', filename);
+  const filepath = path.join(__dirname, '../../../../coupons', 'qr_codes', filename);
   console.log(filepath);
   
   //const logoPath = path.join(__dirname, '../../../../', './public/assets/logo.png'); // Path to the logo image file
 
-  return new Promise<void>((resolve, reject) => {
+  return new Promise<{ filepath: string }>((resolve, reject) => {
     //const child = spawn('qrencode', ['-t', 'PNG', '-o', filepath, '-l', logoPath, '-L', 'M', JSON.stringify(body)], { stdio: 'pipe' });
     const child = spawn('qrencode', ['-t', 'PNG', '-o', filepath, JSON.stringify(body)], { stdio: 'pipe' });
 
@@ -25,13 +60,11 @@ async function generateQRCode(pointId: number, body: any) {
       if (code !== 0) {
         reject(new Error(`Failed to generate QR code: ${code}`));
       } else {
-        resolve();
+        resolve({ filepath });
       }
     });
   });
 }
-
-
 
 
 export default async function createPoints({ initialAmount, issuerId, promotionId, productId }: CreatePointArgs): Promise<{ point: Point }> {
@@ -51,9 +84,8 @@ export default async function createPoints({ initialAmount, issuerId, promotionI
     }
 
     const payload: JWTCodeTokenPayload = {
+      issuerId,
       initialAmount,
-      currentAmount:initialAmount,
-      issuerId: issuerId
     }
     if (promotionId) {
       payload.promotionId = promotionId
@@ -72,9 +104,9 @@ export default async function createPoints({ initialAmount, issuerId, promotionI
         ownerId: null
       }
     })
-    console.log("createdPoint", point)
-    const qrcodeBody = { url: "example.com", code: token }
-    await generateQRCode(point.id, qrcodeBody);
+    const qrcodeBody = `${process.env.POINTS_URL!}/redeem?code=${token}`
+    const { filepath } = await generateQRCode(point.id, qrcodeBody);
+    await generateCoupon(filepath);
 
     return { point }
   } catch (error) {
