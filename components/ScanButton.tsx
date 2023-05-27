@@ -1,4 +1,6 @@
 import { useEffect, useRef, useState } from "react";
+import { BrowserQRCodeReader } from '@zxing/browser';
+
 
 const ScanButton = () => {
   const [isScanning, setIsScanning] = useState(false)
@@ -9,6 +11,16 @@ const ScanButton = () => {
     videoRef.current.srcObject = stream;
     streamRef.current = stream; // Store the stream reference
 
+    const codeReader = new BrowserQRCodeReader();
+    codeReader.decodeFromVideoElement(videoRef.current, (result, error) => {
+        if (result) {
+        // QR code successfully decoded, do something with the result
+        console.log('QR code result:', result.getText());
+        } else if (error) {
+        // Error occurred while decoding QR code
+        console.error('Error decoding QR code:', error);
+        }
+    });
   };
 
   const handleError = (error) => {
