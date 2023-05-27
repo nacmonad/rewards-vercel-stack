@@ -104,7 +104,7 @@ export default async function createPoints({ initialAmount, issuerId, promotionI
         ownerId: null
       }
     })
-    const qrcodeBody = `${process.env.POINTS_URL!}/redeem?code=${token}`
+    const qrcodeBody = `${process.env.POINTS_URL!}/claim?code=${token}`
     const { filepath } = await generateQRCode(point.id, qrcodeBody);
     await generateCoupon(filepath);
 
