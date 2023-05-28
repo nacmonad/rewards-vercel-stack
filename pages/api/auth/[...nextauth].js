@@ -20,8 +20,6 @@ export const authOptions = {
   secret: process.env.SESSION_SECRET,
   callbacks: {
     async signIn({user, account, profile}) {
-      console.log("[signIn]", {user, account, profile})
-
       const existingUser = await prisma.user.findFirst({
         where:{
           [`${account.provider}Id`] : user.id
@@ -29,11 +27,6 @@ export const authOptions = {
         include:{
           role:true
         }
-      });
-
-      console.log("[signIn]existingUser", {
-        user,
-        existingUser
       });
 
       if (!existingUser) {
@@ -49,12 +42,13 @@ export const authOptions = {
             role:true
           }
         });
-        return true
-      }
+             // Return the updated token object
       return true
-    },
+      }
+        // Return the updated token object
+      return true
+  },
     async session({session, token, user}) {
-      const updatedSession = { ...session };
 
       const existingUser = await prisma.user.findFirst({
         where:{
@@ -65,7 +59,10 @@ export const authOptions = {
         }
       });
 
-      //session.user = existingUser;
+      //combine nextauth user with db user props
+      //session.accessToken = ``;
+      session.user = { ...session.user, ...existingUser};
+      //make role the string, rather than the embedded role object
       session.user.role = existingUser.role.name;
       return session;
     },

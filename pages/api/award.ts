@@ -27,12 +27,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     let payload: JWTCodeTokenPayload;
+    console.log("[award]", {
+      userId,
+      code,
+    })
 
     try {
       payload = jwt.verify(code, process.env.POINTS_JWT_SECRET!) as JWTCodeTokenPayload;
     } catch (err) {
+      console.log("[payloadErr]", err)
       return res.status(401).json({ message: 'Invalid code' });
     }
+
+    
 
     const point = await prisma.point.findUnique({ where: { code } });
 
@@ -43,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (point.ownerId || point.awardedAt) {
       return res.status(409).json({ message: 'Point already awarded' });
     }
-
+    
     await prisma.point.update({
       where: { id: point.id },
       data: { ownerId: userId, awardedAt: new Date() },
