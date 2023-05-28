@@ -25,6 +25,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (!userId) {
         return res.status(400).json({ message: 'Missing userId'})
     }
+    if (!process.env.POINTS_JWT_SECRET) {
+      return res.status(500).json({ message: 'Missing JWT Secret'})
+    }
 
     let payload: JWTCodeTokenPayload;
     console.log("[award]", {
