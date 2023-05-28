@@ -29,8 +29,8 @@ const ScanButton = () => {
                   }
             }
             if (result) {
-            let pathname = result.getText()           
-            pathname = pathname.replace('"', '');
+            let pathname = result.getText();           
+            pathname = pathname.replaceAll('"', '');
             window.location.href= pathname
             }
             //ignore errors
