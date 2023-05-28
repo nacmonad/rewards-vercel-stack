@@ -51,12 +51,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(409).json({ message: 'Point already awarded' });
     }
     
-    await prisma.point.update({
+    const awardedPoint = await prisma.point.update({
       where: { id: point.id },
       data: { ownerId: userId, awardedAt: new Date() },
     });
 
-    return res.status(200).json({ message: 'Point awarded successfully' });
+    return res.status(200).json({ message: 'Point awarded successfully', point: awardedPoint });
   } catch (err) {
     console.error(err);
 
